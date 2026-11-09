@@ -1,0 +1,10 @@
+export const INITIAL={A:{x:300,y:70},B:{x:100,y:330},C:{x:500,y:330}};
+export const cloneVertices=v=>Object.fromEntries(Object.entries(v).map(([k,p])=>[k,{...p}]));
+export function rawAngles(v){const names=['A','B','C'];return names.map((key,i)=>{const p=v[key],q=v[names[(i+1)%3]],r=v[names[(i+2)%3]],u={x:q.x-p.x,y:q.y-p.y},w={x:r.x-p.x,y:r.y-p.y};if(Math.hypot(u.x,u.y)<1e-9||Math.hypot(w.x,w.y)<1e-9)throw Error('頂點不能重疊');return Math.atan2(Math.abs(u.x*w.y-u.y*w.x),u.x*w.x+u.y*w.y)*180/Math.PI;});}
+export function validTriangle(v){try{const a=rawAngles(v);return a.every(n=>Number.isFinite(n)&&n>=8)&&Math.abs(a.reduce((x,y)=>x+y,0)-180)<1e-6;}catch{return false;}}
+export function displayAngles(v){const a=rawAngles(v),rounded=a.map(Math.floor);let left=180-rounded.reduce((s,n)=>s+n,0);const order=a.map((n,i)=>({i,f:n-Math.floor(n)})).sort((a,b)=>b.f-a.f);for(let n=0;n<left;n++)rounded[order[n%3].i]++;return rounded;}
+export function moveVertex(v,key,x,y){if(!Object.hasOwn(v,key)||!Number.isFinite(x)||!Number.isFinite(y))return v;const next={...v,[key]:{x:Math.max(35,Math.min(565,x)),y:Math.max(35,Math.min(365,y))}};return validTriangle(next)?next:v;}
+export const STEPS=[{target:'A',text:'由 A 出發。拖曳三個頂點，先觀察三角形。'},{target:'A',text:'觀察 A 的內角，記下紅色角度。'},{target:'B',text:'沿著邊前往 B，三角形的形狀仍可改變。'},{target:'B',text:'觀察 B 的內角，再把藍色角度加進來。'},{target:'C',text:'前往 C，還差最後一個內角。'},{target:'C',text:'觀察 C 的內角。三個角已經收集完成。'},{target:'A',text:'回到 A，試想像把三個角搬到同一點。'},{target:'A',text:'把三個角拼在一起，剛好形成一個平角：180°。'}];
+export const nextStep=(step,delta)=>Math.max(0,Math.min(STEPS.length-1,step+delta));
+export function wedge(cx,cy,r,start,end){const p=a=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];const a=p(start),b=p(end),delta=end-start;return `M ${cx} ${cy} L ${a[0]} ${a[1]} A ${r} ${r} 0 ${Math.abs(delta)>Math.PI?1:0} ${delta>=0?1:0} ${b[0]} ${b[1]} Z`;}
+export function proofSectors(v){let cursor=Math.PI;return rawAngles(v).map(angle=>{const start=cursor;cursor+=angle*Math.PI/180;return {angle,start,end:cursor};});}
