@@ -1,6 +1,6 @@
 # 數學教具`「三角形內角探索」` 現已推出!
 
-[三角形內角探索](https://yuenhk.github.io/Exploring-interior-angles-of-triangles/)是一款基於 `Canva AI`，為教授三角形內角和而設的網頁數學教具；易玩且動感；具教育意義；部分功能仍在開發中 🚧。  
+[三角形內角探索](https://wcy.hk/Exploring-interior-angles-of-triangles/)是一款基於 `Canva AI`，為教授三角形內角和而設的網頁數學教具；易玩且動感；具教育意義；部分功能仍在開發中 🚧。  
 [三角形內角探索 卡通版](https://fwftfyhungicttesting.my.canva.site/c1e6zhkkbvhgn7ht)
 
 ---
